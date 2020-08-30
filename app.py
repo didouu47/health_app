@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun July 19 th 2020
-
-@author: Azemar David
-"""
 import dash
 import dash_auth
 import dash_core_components as dcc
