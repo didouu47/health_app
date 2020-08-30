@@ -7,17 +7,12 @@ import dash_bootstrap_components as dbc
 import dash_table 
 from dash.exceptions import PreventUpdate
 from dash_table import DataTable
-from sqlalchemy import create_engine
 import sqlite3
 import dash_table.FormatTemplate as FormatTemplate
 from dash_table.Format import Format, Scheme, Sign, Symbol
 
 import pandas as pd
-import base64
 import numpy as np
-import math
-import io
-import json
 from pandas.io.json import json_normalize
 import time
 from datetime import datetime
@@ -26,11 +21,8 @@ import plotly.graph_objects as go
 import plotly.figure_factory as ff
 import plotly.express as px
 from plotly.subplots import make_subplots
-from collections import OrderedDict
 
-from waitress import serve
 
-import dash_daq as daq
 
 
 ############################################################################################################################
