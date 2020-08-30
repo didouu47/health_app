@@ -34,7 +34,7 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 
-from waitress import serve
+
 
 import dash_daq as daq
 
@@ -589,43 +589,43 @@ blood_pressure_input = dbc.Card([
                     ],style={'width':'900px','textAlign': 'center'})                    
 
 
-# consumption_input_1 = dbc.Card([
-#                     dbc.CardHeader([html.H4("Today's consumption")]),
-#                     dbc.CardBody([
-#                       dbc.Row([
-#                         dbc.Col([
-#                           daq.BooleanSwitch(id='smoking_switch',
-#                                           on=False,color="#9B51E0")
-#                                 ]),
-#                         dbc.Col([
-#                            dbc.Label("Smoking"),
-#                                 ]),    
-#                         dbc.Col([
-#                           daq.BooleanSwitch(id='alcool_switch',
-#                                           on=False,color="#9B51E0")
-#                                 ]),
-#                         dbc.Col([
-#                            dbc.Label("Alcool"),
-#                                 ]),                                                                                                      
-#                      ],justify="center"),
-#                       dbc.Row([
-#                         dbc.Col([
-#                           daq.BooleanSwitch(id='meat_switch',
-#                                           on=False,color="#9B51E0")
-#                                 ]),
-#                         dbc.Col([
-#                            dbc.Label("Meat"),
-#                                 ]),    
-#                         dbc.Col([
-#                           daq.BooleanSwitch(id='Junk_food_switch',
-#                                           on=False,color="#9B51E0")
-#                                 ]),
-#                         dbc.Col([
-#                            dbc.Label("Junk food"),
-#                                 ]),                                                                                                      
-#                      ],justify="center"),
-#                     ])
-#                     ],style={'width':'900px','textAlign': 'center'})                    
+consumption_input_1 = dbc.Card([
+                    dbc.CardHeader([html.H4("Today's consumption")]),
+                    dbc.CardBody([
+                      dbc.Row([
+                        dbc.Col([
+                          daq.BooleanSwitch(id='smoking_switch',
+                                          on=False,color="#9B51E0")
+                                ]),
+                        dbc.Col([
+                           dbc.Label("Smoking"),
+                                ]),    
+                        dbc.Col([
+                          daq.BooleanSwitch(id='alcool_switch',
+                                          on=False,color="#9B51E0")
+                                ]),
+                        dbc.Col([
+                           dbc.Label("Alcool"),
+                                ]),                                                                                                      
+                     ],justify="center"),
+                      dbc.Row([
+                        dbc.Col([
+                          daq.BooleanSwitch(id='meat_switch',
+                                          on=False,color="#9B51E0")
+                                ]),
+                        dbc.Col([
+                           dbc.Label("Meat"),
+                                ]),    
+                        dbc.Col([
+                          daq.BooleanSwitch(id='Junk_food_switch',
+                                          on=False,color="#9B51E0")
+                                ]),
+                        dbc.Col([
+                           dbc.Label("Junk food"),
+                                ]),                                                                                                      
+                     ],justify="center"),
+                    ])
+                    ],style={'width':'900px','textAlign': 'center'})                    
 
 
 
@@ -665,10 +665,10 @@ layout_add_measure=dbc.Container([
                              ],justify="center"),
                     html.Br(),
                     html.Br(), 
-#                     dbc.Row([
-#                              consumption_input_1
-#                              ],justify="center"),
-#                     html.Br(),
+                    dbc.Row([
+                             consumption_input_1
+                             ],justify="center"),
+                    html.Br(),
                     html.Br(),                  
                     dbc.Row([dbc.Button("Validate & save",id="button_validate_measure")],justify="center"),
                     html.Br(),
