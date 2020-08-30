@@ -1,5 +1,11 @@
 # -*- coding: utf-8 -*-
+"""
+Created on Sun July 19 th 2020
+
+@author: Azemar David
+"""
 import dash
+
 import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output,State, MATCH, ALL
@@ -7,12 +13,17 @@ import dash_bootstrap_components as dbc
 import dash_table 
 from dash.exceptions import PreventUpdate
 from dash_table import DataTable
+
 import sqlite3
 import dash_table.FormatTemplate as FormatTemplate
 from dash_table.Format import Format, Scheme, Sign, Symbol
 
 import pandas as pd
+import base64
 import numpy as np
+import math
+import io
+import json
 from pandas.io.json import json_normalize
 import time
 from datetime import datetime
@@ -23,6 +34,9 @@ import plotly.express as px
 from plotly.subplots import make_subplots
 
 
+from waitress import serve
+
+import dash_daq as daq
 
 
 ############################################################################################################################
@@ -34,13 +48,9 @@ from plotly.subplots import make_subplots
 ############################################################################################################################
 
 
-them = 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css'
-
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.FLATLY],meta_tags=[{"name": "viewport", "content": "width=device-width"}])
-# app = dash.Dash(__name__, external_stylesheets=[them],meta_tags=[{"name": "viewport", "content": "width=device-width"}])
-# # app = dash.Dash(__name__,meta_tags=[{"name": "viewport", "content": "width=device-width"}])
 
-#app.config.suppress_callback_exceptions = True
+app.config.suppress_callback_exceptions = True
 server = app.server
 
 
@@ -70,6 +80,7 @@ logo_4 = 'assets/temperature.PNG'
 ############################################################################################################################
 ############################################################################################################################
 
+#######  layout #########
 
 layout_home = dbc.Container([
                     html.Br(),
@@ -99,7 +110,7 @@ layout_home = dbc.Container([
                                         ],justify='center'),
                                            ]),
                                 dbc.CardFooter([           
-                                         dbc.Button("Open", color="success",id="bt1",href="/adddata"), 
+                                         dbc.Button("Open", color="success",id="bt1"), 
                                                ],style={'align':'center'}),  
                                       ],style={'height': '250px','width':'300px','textAlign': 'center'}
                                     ),
@@ -114,7 +125,7 @@ layout_home = dbc.Container([
                                         ],justify='center'),
                                            ]),
                                 dbc.CardFooter([           
-                                         dbc.Button("Open", color="success",id="bt2",href="/seedata"), 
+                                         dbc.Button("Open", color="success",id="bt2"), 
                                                ],style={'align':'center'}),  
                                       ],style={'height': '250px','width':'300px','textAlign': 'center'}
                                     ),
@@ -132,7 +143,7 @@ layout_home = dbc.Container([
                                     #       className="card-text",
                                            ]),
                                 dbc.CardFooter([           
-                                         dbc.Button("Open", color="success",id="bt3",href="/adddata"), 
+                                         dbc.Button("Open", color="success",id="bt3"), 
                                                ],style={'align':'center'}),  
                                       ],style={'height': '250px','width':'300px','textAlign': 'center'}
                                     ),  
@@ -149,8 +160,29 @@ def App_home():
               ])
     return layout	
 
+#######  callback #########
 
+@app.callback(Output('url', 'pathname'),
+              [Input('bt1', 'n_clicks'),
+               Input('bt2', 'n_clicks'),
+               Input('bt3', 'n_clicks')])
+            ])
+def display_page(n0,n1,n2):
+    ctx = dash.callback_context
 
+    if not ctx.triggered:
+        return "" 
+    else:
+        button_id = ctx.triggered[0]['prop_id'].split('.')[0]   
+
+        if button_id == 'bt1': 
+            return "/adddata" 
+        elif button_id == 'bt2':    
+            return "/seedata"
+        elif button_id == 'bt3':    
+            return "/senddoctor"  
+        else:
+            return "" 
 
 
 ############################################################################################################################
@@ -563,15 +595,15 @@ consumption_input_1 = dbc.Card([
                     dbc.CardBody([
                       dbc.Row([
                         dbc.Col([
-                          #daq.BooleanSwitch(id='smoking_switch',
-                          #                on=False,color="#9B51E0")
+                          daq.BooleanSwitch(id='smoking_switch',
+                                          on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Smoking"),
                                 ]),    
                         dbc.Col([
-                          #daq.BooleanSwitch(id='alcool_switch',
-                          #                on=False,color="#9B51E0")
+                          daq.BooleanSwitch(id='alcool_switch',
+                                          on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Alcool"),
@@ -579,15 +611,15 @@ consumption_input_1 = dbc.Card([
                      ],justify="center"),
                       dbc.Row([
                         dbc.Col([
-                          #daq.BooleanSwitch(id='meat_switch',
-                          #                on=False,color="#9B51E0")
+                          daq.BooleanSwitch(id='meat_switch',
+                                          on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Meat"),
                                 ]),    
                         dbc.Col([
-                          #daq.BooleanSwitch(id='Junk_food_switch',
-                          #                on=False,color="#9B51E0")
+                          daq.BooleanSwitch(id='Junk_food_switch',
+                                          on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Junk food"),
@@ -595,9 +627,6 @@ consumption_input_1 = dbc.Card([
                      ],justify="center"),
                     ])
                     ],style={'width':'900px','textAlign': 'center'})                    
-
-
-
 
 
 
@@ -651,6 +680,7 @@ layout_add_measure=dbc.Container([
 
 def App_add_data():
     layout = layout_add_measure
+
     return layout
 
 #######  callbacks #########
@@ -744,5 +774,7 @@ def display_page(pathname):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=False)
-
+    #app.run_server(debug=False)#,host='10.200.13.38',port='5000')
+    app.run_server(debug=True)#,host='10.200.13.38',port='8051')
+    # app.run_server(debug=False)
+    # serve(app, host='0.0.0.0', port=8000)
