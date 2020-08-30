@@ -166,7 +166,6 @@ def App_home():
               [Input('bt1', 'n_clicks'),
                Input('bt2', 'n_clicks'),
                Input('bt3', 'n_clicks')])
-            ])
 def display_page(n0,n1,n2):
     ctx = dash.callback_context
 
