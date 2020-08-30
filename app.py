@@ -572,15 +572,15 @@ consumption_input_1 = dbc.Card([
                     dbc.CardBody([
                       dbc.Row([
                         dbc.Col([
-                          daq.BooleanSwitch(id='smoking_switch',
-                                          on=False,color="#9B51E0")
+                          #daq.BooleanSwitch(id='smoking_switch',
+                          #                on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Smoking"),
                                 ]),    
                         dbc.Col([
-                          daq.BooleanSwitch(id='alcool_switch',
-                                          on=False,color="#9B51E0")
+                          #daq.BooleanSwitch(id='alcool_switch',
+                          #                on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Alcool"),
@@ -588,15 +588,15 @@ consumption_input_1 = dbc.Card([
                      ],justify="center"),
                       dbc.Row([
                         dbc.Col([
-                          daq.BooleanSwitch(id='meat_switch',
-                                          on=False,color="#9B51E0")
+                          #daq.BooleanSwitch(id='meat_switch',
+                          #                on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Meat"),
                                 ]),    
                         dbc.Col([
-                          daq.BooleanSwitch(id='Junk_food_switch',
-                                          on=False,color="#9B51E0")
+                          #daq.BooleanSwitch(id='Junk_food_switch',
+                          #                on=False,color="#9B51E0")
                                 ]),
                         dbc.Col([
                            dbc.Label("Junk food"),
