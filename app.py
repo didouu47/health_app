@@ -15,9 +15,6 @@ import dash_table
 from dash.exceptions import PreventUpdate
 from dash_table import DataTable
 
-import os
-import psycopg2
-
 import sqlite3
 import dash_table.FormatTemplate as FormatTemplate
 from dash_table.Format import Format, Scheme, Sign, Symbol
@@ -66,7 +63,49 @@ server = app.server
 ############################################################################################################################
 
 data_osamu = pd.read_csv("assets/Osamu_health_data.csv", delimiter=";",decimal=".",parse_dates=['Date'],dayfirst=True)
-print(data_osamu.dtypes)
+
+
+# df = pd.read_csv("assets/Osamu_health_data.csv",delimiter=';',decimal='.',parse_dates=['Date'],dayfirst=True)
+
+
+# # time.sleep(10)
+
+# df = df[df['Date']>"01/01/2020"]
+# df = df.replace(0,"")
+# print(df)
+# df['Month'] = pd.DatetimeIndex(df['Date']).month
+# # df['Limit_up'] = 100
+# # df['Limit_up_b'] = 80 
+# # df['Limit_up_c'] = 120
+# # df['Limit_up_2_b'] = 140
+# # df['Limit_up_2_c'] = 180
+# # df['Limit_down'] = 70
+# print(df.columns)
+
+
+
+# pivot = pd.pivot_table(df,
+#                       index='Month',
+#                       values = ['Sugar_morning','Sugar_evening','Weight','Temp_evening','Temp_morning'],                      
+#                       # values = ['Sugar_morning','Sugar_evening','Limit_up','Limit_up_2_b','Limit_up_2_c',
+#                       #           'Limit_down','Limit_up_b','Limit_up_c','Weight','Temp_evening','Temp_morning'],
+#                       aggfunc = np.mean).reset_index()
+
+
+
+
+# print(pivot)
+
+# pivot['Month'] = pivot['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# pivot=pivot.round(2)
 
 #picture
 logo_1 = 'assets/add_logo.PNG'
@@ -167,7 +206,8 @@ def App_home():
 @app.callback(Output('url', 'pathname'),
               [Input('bt1', 'n_clicks'),
                Input('bt2', 'n_clicks'),
-               Input('bt3', 'n_clicks')])
+               Input('bt3', 'n_clicks'),
+               ])
 def display_page(n0,n1,n2):
     ctx = dash.callback_context
 
@@ -181,9 +221,489 @@ def display_page(n0,n1,n2):
         elif button_id == 'bt2':    
             return "/seedata"
         elif button_id == 'bt3':    
-            return "/senddoctor"  
+            return "/senddoctor"          
         else:
             return "" 
+
+
+
+############################################################################################################################
+############################################################################################################################
+############################################################################################################################
+#####################################     see data   #######################################################################
+############################################################################################################################	
+############################################################################################################################
+############################################################################################################################
+
+
+#######  static figures (to remove later) #########
+
+
+# fig1 = go.Figure()
+# fig1.add_trace(go.Scatter(x=df['Date'], y=df['Sugar_morning'],hovertext=df['Morning_sugar_time'],
+#                     mode='lines',
+#                     name='Sugar_morning'))
+# fig1.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_b'],
+#                      mode='lines',
+#                      name='Normal range low'))
+# fig1.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_c'],
+#                      mode='lines',
+#                      name='Normal range high'))
+# fig1.update_layout(title="Daily Morning Blood Sugar vs normal range")
+# fig1.update_layout(hovermode="x")
+
+
+# fig2 = go.Figure(data=[
+#     go.Bar(name='Average Morning Sugar', x=pivot['Month'], y=pivot['Sugar_morning']),
+#     go.Scatter(name='Normal range low', x=pivot['Month'], y=pivot['Limit_up_b'],mode='lines'),
+#     go.Scatter(name='Normal range high', x=pivot['Month'], y=pivot['Limit_up_c'],mode='lines')
+# ])
+# # Change the bar mode
+# fig2.update_layout(barmode='group')
+# fig2.update_layout(title="Monthly Average - Morning Blood Sugar")
+# fig2.update_layout(hovermode="x")
+
+
+
+# df['Month'] = df['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# fig3 = px.box(df, x='Month', y='Sugar_morning', points="all")
+# fig3.update_layout(title="Monthly Statistical Analysis - Morning Blood Sugar")
+# fig3.update_layout(hovermode="x")
+
+
+# fig4 = go.Figure()
+# fig4.add_trace(go.Scatter(x=df['Date'], y=df['Sugar_evening'],hovertext=df['Evening_sugar_time'],
+#                     mode='lines',
+#                     name='Sugar_evening'))
+# fig4.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_2_b'],
+#                      mode='lines',
+#                      name='Normal range low'))
+# fig4.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_2_c'],
+#                      mode='lines',
+#                      name='Normal range high'))
+# fig4.update_layout(title="Daily Evening Blood Sugar vs normal range")
+# fig4.update_layout(hovermode="x")
+
+
+# fig5 = go.Figure(data=[
+#     go.Bar(name='Average Evening Sugar', x=pivot['Month'], y=pivot['Sugar_evening']),
+#     go.Scatter(name='Normal range low', x=pivot['Month'], y=pivot['Limit_up_2_b'],mode='lines'),
+#     go.Scatter(name='Normal range high', x=pivot['Month'], y=pivot['Limit_up_2_c'],mode='lines')
+# ])
+# # Change the bar mode
+# fig5.update_layout(barmode='group')
+# fig5.update_layout(title="Monthly Average - Evening Blood Sugar")
+# fig5.update_layout(hovermode="x")
+
+
+# df['Month'] = df['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# fig6 = px.box(df, x='Month', y='Sugar_evening', points="all")
+# fig6.update_layout(title="Monthly Statistical Analysis - Evening Blood Sugar")
+# fig6.update_layout(hovermode="x")
+
+
+# fig7 = go.Figure()
+# fig7.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Temp_evening'],
+#                     mode='lines',
+#                     name='Average Temperature evening'))
+# fig7.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Temp_morning'],
+#                      mode='lines',
+#                      name='Average Temperature morning'))
+# fig7.update_layout(title="Monthly Average - Morning & Evening temperature")
+
+
+# df['Month'] = df['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# fig8 = px.box(df, x='Month', y='Temp_morning', points="all")
+# fig8.update_layout(title="Monthly Statistical Analysis - Temperature morning")
+# fig8.update_layout(hovermode="x")
+
+
+# df['Month'] = df['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# fig9 = px.box(df, x='Month', y='Temp_evening', points="all")
+# fig9.update_layout(title="Monthly Statistical Analysis - Temperature evening")
+# fig9.update_layout(hovermode="x")
+
+
+# fig10 = go.Figure()
+# fig10.add_trace(go.Scatter(x=df['Date'], y=df['Weight'],
+#                     mode='lines',
+#                     name='Weight'))
+
+# fig10.update_layout(title="Daily Weight")
+# fig10.update_layout(hovermode="x")
+
+
+# fig11 = go.Figure()
+# fig11.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Weight'],
+#                     mode='lines',
+#                     name='Average Weight'))
+# fig11.update_layout(title="Monthly Average - Weight")
+
+
+# df['Month'] = df['Month'].replace({2:'February',
+#                                      3:'March',
+#                                      4:'April',
+#                                      5:'May',
+#                                      6:'June',
+#                                      7:'July',
+#                                      8:'August'
+#                                   })
+
+# fig12 = px.box(df, x='Month', y='Weight', points="all")
+# fig12.update_layout(title="Monthly Statistical Analysis - Weight")
+# fig12.update_layout(hovermode="x")
+
+
+
+#######  figure #########
+
+fig1 = dcc.Graph(id='daily_morning_sugar')#,style={'height': '450px','width':'550px'})
+fig2 = dcc.Graph(id='monthly_morning_sugar')
+fig3 = dcc.Graph(id='stats_morning_sugar')
+fig4 = dcc.Graph(id='daily_evening_sugar')
+fig5 = dcc.Graph(id='monthly_evening_sugar')
+fig6 = dcc.Graph(id='stats_evening_sugar')
+fig7 = dcc.Graph(id='monthly_average_temp')
+fig8 = dcc.Graph(id='stats_morning_temp')
+fig9 = dcc.Graph(id='stats_afternoon_temp')
+fig10 = dcc.Graph(id='daily_weight')
+fig11 = dcc.Graph(id='monthly_average_weight')
+fig12 = dcc.Graph(id='stats_weight')
+
+
+#######  layout #########
+
+
+
+layout_see_data=dbc.Container([
+                    html.Br(),
+                    dbc.Row([html.H2(children='Data analysis',
+                              style={
+                                   'textAlign': 'center',
+                                   'textJustify':'center',
+                                   'height':'26px'
+                                     })
+                            ],justify="center"),
+                    html.Br(),
+                    # dbc.Row([
+                    # dbc.Button("Home",id='home_see_data'),
+                    #         ],justify="center"),                    
+                    html.Br(),
+                    dbc.Row([
+                             fig1
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig2
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig3
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig4
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig5
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig6
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig7
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig8
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig9
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig10
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig11
+                             ],justify="center",form=True,),
+                    html.Br(),
+                    dbc.Row([
+                             fig12
+                             ],justify="center",form=True,),
+                    html.Br(),                                                                                                                                                                                                                                     
+                    html.Br(),
+                    html.Br(),
+                    dbc.Row([html.H6('©Datamink,V1.0 August 2020')],justify="center")
+                            ],fluid=True,id="explore_data")  
+
+
+
+
+
+
+
+
+#######  callback #########
+
+
+@app.callback( 
+   [
+    Output("daily_morning_sugar","figure"),
+    Output("monthly_morning_sugar","figure"),
+    Output("stats_morning_sugar","figure"),
+    Output("daily_evening_sugar","figure"),
+    Output("monthly_evening_sugar","figure"),
+    Output("stats_evening_sugar","figure"),
+    Output("monthly_average_temp","figure"),
+    Output("stats_morning_temp","figure"),
+    Output("stats_afternoon_temp","figure"),
+    Output("daily_weight","figure"),
+    Output("monthly_average_weight","figure"),
+    Output("stats_weight","figure")
+    ],
+   [Input('url', 'pathname')],  
+   )         
+def update_chart_see_data(pathname):
+  # ctx = dash.callback_context
+
+  # if not ctx.triggered:
+  #       return {},{},{},{},{},{},{},{},{},{},{},{} 
+  # else:
+  #       button_id = ctx.triggered[0]['prop_id'].split('.')[0]  
+
+  # if button_id == 'update_see_data':
+  if pathname == '/seedata':  
+          
+          df = pd.read_csv("assets/Osamu_health_data.csv",delimiter=';',decimal='.',parse_dates=['Date'],dayfirst=True)
+          df = df[df['Date']>"01/01/2020"]
+          df = df.replace(0,np.nan)
+          print(df)
+          df['Month'] = pd.DatetimeIndex(df['Date']).month
+          df['Limit_up'] = 100
+          df['Limit_up_b'] = 80 
+          df['Limit_up_c'] = 120
+          df['Limit_up_2_b'] = 140
+          df['Limit_up_2_c'] = 180
+          df['Limit_down'] = 70
+          print(df.columns)
+          print(df)
+          pivot = pd.pivot_table(df,
+                      index='Month',
+                      # values = ['Sugar_morning','Sugar_evening','Weight','Temp_evening','Temp_morning'],                      
+                      values = ['Sugar_morning','Sugar_evening','Limit_up','Limit_up_2_b','Limit_up_2_c',
+                                'Limit_down','Limit_up_b','Limit_up_c','Weight','Temp_evening','Temp_morning'],
+                      aggfunc = np.mean).reset_index()
+          pivot['Month'] = pivot['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+          pivot=pivot.round(2)  
+          print(pivot)
+          fig1 = go.Figure()
+          fig1.add_trace(go.Scatter(x=df['Date'], y=df['Sugar_morning'],hovertext=df['Morning_sugar_time'],
+                    mode='lines',
+                    name='Sugar_morning'))
+          fig1.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_b'],
+                     mode='lines',
+                     name='Normal range low'))
+          fig1.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_c'],
+                     mode='lines',
+                     name='Normal range high'))
+          fig1.update_layout(title="Daily Morning Blood Sugar vs normal range")
+          fig1.update_layout(hovermode="x")
+
+
+          fig2 = go.Figure(data=[
+              go.Bar(name='Average Morning Sugar', x=pivot['Month'], y=pivot['Sugar_morning']),
+              go.Scatter(name='Normal range low', x=pivot['Month'], y=pivot['Limit_up_b'],mode='lines'),
+              go.Scatter(name='Normal range high', x=pivot['Month'], y=pivot['Limit_up_c'],mode='lines')
+          ])
+          # Change the bar mode
+          fig2.update_layout(barmode='group')
+          fig2.update_layout(title="Monthly Average - Morning Blood Sugar")
+          fig2.update_layout(hovermode="x")
+
+
+
+          df['Month'] = df['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+
+          fig3 = px.box(df, x='Month', y='Sugar_morning', points="all")
+          fig3.update_layout(title="Monthly Statistical Analysis - Morning Blood Sugar")
+          fig3.update_layout(hovermode="x")
+
+
+          fig4 = go.Figure()
+          fig4.add_trace(go.Scatter(x=df['Date'], y=df['Sugar_evening'],hovertext=df['Evening_sugar_time'],
+                    mode='lines',
+                    name='Sugar_evening'))
+          fig4.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_2_b'],
+                     mode='lines',
+                     name='Normal range low'))
+          fig4.add_trace(go.Scatter(x=df['Date'], y=df['Limit_up_2_c'],
+                     mode='lines',
+                     name='Normal range high'))
+          fig4.update_layout(title="Daily Evening Blood Sugar vs normal range")
+          fig4.update_layout(hovermode="x")
+
+
+          fig5 = go.Figure(data=[
+              go.Bar(name='Average Evening Sugar', x=pivot['Month'], y=pivot['Sugar_evening']),
+              go.Scatter(name='Normal range low', x=pivot['Month'], y=pivot['Limit_up_2_b'],mode='lines'),
+              go.Scatter(name='Normal range high', x=pivot['Month'], y=pivot['Limit_up_2_c'],mode='lines')
+          ])
+          # Change the bar mode
+          fig5.update_layout(barmode='group')
+          fig5.update_layout(title="Monthly Average - Evening Blood Sugar")
+          fig5.update_layout(hovermode="x")
+
+
+          df['Month'] = df['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+
+          fig6 = px.box(df, x='Month', y='Sugar_evening', points="all")
+          fig6.update_layout(title="Monthly Statistical Analysis - Evening Blood Sugar")
+          fig6.update_layout(hovermode="x")
+
+
+          fig7 = go.Figure()
+          fig7.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Temp_evening'],
+                    mode='lines',
+                    name='Average Temperature evening'))
+          fig7.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Temp_morning'],
+                     mode='lines',
+                     name='Average Temperature morning'))
+          fig7.update_layout(title="Monthly Average - Morning & Evening temperature")
+
+
+          df['Month'] = df['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+
+          fig8 = px.box(df, x='Month', y='Temp_morning', points="all")
+          fig8.update_layout(title="Monthly Statistical Analysis - Temperature morning")
+          fig8.update_layout(hovermode="x")
+
+
+          df['Month'] = df['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+
+          fig9 = px.box(df, x='Month', y='Temp_evening', points="all")
+          fig9.update_layout(title="Monthly Statistical Analysis - Temperature evening")
+          fig9.update_layout(hovermode="x")
+
+
+          fig10 = go.Figure()
+          fig10.add_trace(go.Scatter(x=df['Date'], y=df['Weight'],
+                    mode='lines',
+                    name='Weight'))
+
+          fig10.update_layout(title="Daily Weight")
+          fig10.update_layout(hovermode="x")
+
+
+          fig11 = go.Figure()
+          fig11.add_trace(go.Scatter(x=pivot['Month'], y=pivot['Weight'],
+                    mode='lines',
+                    name='Average Weight'))
+          fig11.update_layout(title="Monthly Average - Weight")
+
+
+          df['Month'] = df['Month'].replace({2:'February',
+                                     3:'March',
+                                     4:'April',
+                                     5:'May',
+                                     6:'June',
+                                     7:'July',
+                                     8:'August'
+                                  })
+
+          fig12 = px.box(df, x='Month', y='Weight', points="all")
+          fig12.update_layout(title="Monthly Statistical Analysis - Weight")
+          fig12.update_layout(hovermode="x")  
+
+          return fig1,fig2,fig3,fig4,fig5,fig6,fig7,fig8,fig9,fig10,fig11,fig12                      
+ 
+
+  else:
+    return {},{},{},{},{},{},{},{},{},{},{},{}  
+
+
+
+
+
+
+
+def App_see_data():
+    layout = layout_see_data
+
+    return layout
+
 
 
 ############################################################################################################################
@@ -672,8 +1192,8 @@ layout_add_measure=dbc.Container([
                                                 id="table_add_data",
                                                 columns=[{"name": i, "id": i} for i in data_osamu.columns],
                                                 data=data_osamu.to_dict('records'))
-                            ]),
-                            #],style={'display': 'none'}),
+                            # ]),
+                            ],style={'display': 'none'}),
                     dbc.Row([html.H2(children='Add daily measures',
                               style={
                                    'textAlign': 'center',
@@ -770,8 +1290,8 @@ def update_data_base_on_selected_date(date_value,data_table):
   
 
   data = pd.DataFrame(data_table)
-  print(data)
-  print(data.dtypes)
+  # print(data)
+  # print(data.dtypes)
   data['Date'] = pd.to_datetime(data['Date'])
 
   if date_value is None:
@@ -1279,7 +1799,7 @@ def update_table_data_and_source(n1,is_open,selected_date,weight,walking_distanc
         data['Date'] = pd.to_datetime(data['Date'])
         data = data.sort_values(by='Date',ascending=True)        
         data_fig=data.to_dict('records')
-        print(data)
+        # print(data)
         data.to_csv ("assets/Osamu_health_data.csv",sep = ';',encoding = "utf-8", index = None)
 
         return not is_open,data_fig 
@@ -1321,6 +1841,8 @@ def display_page(pathname):
         return App_add_data() 
     elif pathname == '/home':
         return App_home()  
+    elif pathname == '/seedata':
+        return App_see_data()
     else:
         return App_home() 
 
@@ -1341,6 +1863,6 @@ def display_page(pathname):
 
 if __name__ == '__main__':
     #app.run_server(debug=False)#,host='10.200.13.38',port='5000')
-    app.run_server(debug=False)#,host='10.200.13.38',port='8051')
+    app.run_server(debug=True)#,host='10.200.13.38',port='8051')
     # app.run_server(debug=False)
     # serve(app, host='0.0.0.0', port=8000)
