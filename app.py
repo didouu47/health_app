@@ -125,7 +125,7 @@ logo_4 = 'assets/temperature.PNG'
 
 layout_home = dbc.Container([
                     html.Br(),
-                    dbc.Row([html.H2(children='Health Follow-Up Application',
+                    dbc.Row([html.H4(children='Health Follow-Up',
                               style={
                                    'textAlign': 'center',
                                    'textJustify':'center',
@@ -133,7 +133,7 @@ layout_home = dbc.Container([
                                      })
                             ],justify="center"),
                     html.Br(),
-                    dbc.Row([html.H4(children='Welcome Back Osamu Kimura !',
+                    dbc.Row([html.H6(children='Welcome Back Osamu Kimura !',
                               style={
                                    'textAlign': 'center',
                                    'textJustify':'center',
