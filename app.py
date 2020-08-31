@@ -15,6 +15,9 @@ import dash_table
 from dash.exceptions import PreventUpdate
 from dash_table import DataTable
 
+import os
+import psycopg2
+
 import sqlite3
 import dash_table.FormatTemplate as FormatTemplate
 from dash_table.Format import Format, Scheme, Sign, Symbol
